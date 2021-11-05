@@ -15,7 +15,6 @@ class MainViewController: UIViewController {
     private var selectedPost: StoragePost!
     private var addedPostTitles = [String]()
     private var favorites: Bool = false
-    private var titleText = ""
     private var tapped = false
     private let table = UITableView(frame: .zero, style: .grouped)
     private var coreDataManager: CoreDataStack!
@@ -37,9 +36,8 @@ class MainViewController: UIViewController {
         super.init(coder: coder)
     }
     
-    init(withCoreData: Bool = false, title: String, manager: CoreDataStack) {
+    init(withCoreData: Bool = false, manager: CoreDataStack) {
         super.init(nibName: nil, bundle: nil)
-        titleText = title
         favorites = withCoreData
         coreDataManager = manager
     }
@@ -56,7 +54,6 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = titleText
         view.addSubview(table)
         
         self.navigationController?.navigationBar.isHidden = true

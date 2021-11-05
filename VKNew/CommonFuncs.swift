@@ -55,4 +55,23 @@ class CommonFuncs: NSObject, NSFetchedResultsControllerDelegate {
         }
         return favoritePosts
     }
+    
+    func getInt(text: String) -> Int64 {
+        guard let number = Int64(text.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) else {
+            fatalError()
+        }
+        return number
+    }
+    
+    //MARK: - Contextual Actions
+    func makeDeleteContextualAction(forRowAt indexPath: IndexPath, predicate: NSPredicate) -> UIContextualAction {
+        return UIContextualAction(style: .destructive, title: "Delete") { (action, swipeButtonView, completion) in
+            print("Свайпнули удалить")
+            let post = self.fetchData(predicate: predicate)[indexPath.row]
+
+            self.coreDataManager.delete(object: post)
+            print("Пост \(post.author ?? "Неизвестный") добавлен в Избранное: favorites \(self.fetchData(predicate: predicate).count)")
+            completion(true)
+        }
+    }
 }

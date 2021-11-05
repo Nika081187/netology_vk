@@ -15,12 +15,10 @@ class ProfileViewController: UIViewController {
     private lazy var screenHeight = screenRect.size.height
     private var selectedPost: StoragePost!
     private var addedPostTitles = [String]()
-    private var favorites: Bool = false
     private var titleText = ""
     private var tapped = false
     private let table = UITableView(frame: .zero, style: .grouped)
     private var coreDataManager: CoreDataStack!
-    private var tableFavoritesPredicate: NSPredicate?
     private let common = CommonFuncs()
     
     private var reuseId: String {
@@ -39,26 +37,23 @@ class ProfileViewController: UIViewController {
         super.init(coder: coder)
     }
     
-    init(withCoreData: Bool = false, title: String, manager: CoreDataStack) {
+    init(withCoreData: Bool = false, manager: CoreDataStack) {
         super.init(nibName: nil, bundle: nil)
-        titleText = title
-        favorites = withCoreData
         coreDataManager = manager
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        reloadTable()
-    }
-    
-    func reloadTable() {
-        print("Перезагружаем таблицу постов")
-        Storage.favoritePosts = self.common.convertCoreDataPostsToStoragePost(posts: common.fetchData(predicate: (favorites ? tableFavoritesPredicate : nil)))
-        table.reloadData()
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        reloadTable()
+//    }
+//
+//    func reloadTable() {
+//        print("Перезагружаем таблицу постов")
+//        Storage.favoritePosts = self.common.convertCoreDataPostsToStoragePost(posts: common.fetchData(predicate: (favorites ? tableFavoritesPredicate : nil)))
+//        table.reloadData()
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = titleText
         view.addSubview(table)
         table.addSubview(avatarButton)
         
@@ -67,46 +62,6 @@ class ProfileViewController: UIViewController {
         tableSetup()
         setupLayout()
         gestureRecognizerSetup()
-        
-        if favorites {
-            let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44))
-            
-            view.addSubview(navBar)
-
-            let navItem = UINavigationItem()
-            let doneItem = UIBarButtonItem(title: "Find", style: .plain, target: nil, action: #selector(showFilterAlert))
-            let photoItem = UIBarButtonItem(title: "Clear filter", style: .plain, target: nil, action: #selector(clearFilterButtonClicked))
-
-            navItem.rightBarButtonItem = doneItem
-            navItem.leftBarButtonItem = photoItem
-
-            navBar.setItems([navItem], animated: false)
-        }
-    }
-    
-    @objc func showFilterAlert() {
-        let ac = UIAlertController(title: "Enter author name", message: nil, preferredStyle: .alert)
-        ac.addTextField()
-
-        let submitAction = UIAlertAction(title: "OK", style: .default) { [self, unowned ac] _ in
-            guard let field = ac.textFields else { return }
-            let answer = field[0]
-            guard let text = answer.text else { return }
-            showAuthor(name: text)
-        }
-        ac.addAction(submitAction)
-        present(ac, animated: true)
-    }
-    func showAuthor(name: String) {
-        print("Показываем посты с определенным автором")
-        tableFavoritesPredicate = NSPredicate(format: "author = %s", argumentArray: [name])
-        reloadTable()
-    }
-    
-    @objc func clearFilterButtonClicked() {
-        print("Очищаем фильтр по автору")
-        tableFavoritesPredicate = nil
-        reloadTable()
     }
     
     func tableSetup() {
@@ -163,7 +118,7 @@ class ProfileViewController: UIViewController {
         pst.likes = post.likes
         
         coreDataManager.save()
-        print("Пост \(post.author) добавлен в Избранное: favorites \(common.fetchData(predicate: (favorites ? tableFavoritesPredicate : nil)).count)")
+        print("Пост \(post.author) добавлен в Избранное: favorites \(common.fetchData(predicate: nil).count)")
         table.reloadData()
     }
     
@@ -291,26 +246,15 @@ extension ProfileViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard section == 0 else {
-            if favorites {
-                let count = common.fetchData(predicate: favorites ? tableFavoritesPredicate : nil).count
-                print("Количество постов в favorites: \(count)")
-                return count
-            } else {
-                return Storage.posts.count
-            }
+            return Storage.posts.count
         }
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: PostTableViewCell = tableView.dequeueReusableCell(withIdentifier: reuseId, for: indexPath) as! PostTableViewCell
-        if favorites {
-            let post = common.fetchData(predicate: (favorites ? tableFavoritesPredicate : nil))[indexPath.row]
-            cell.configureViaCoreData(post: post )
-        } else {
             let post = Storage.posts[indexPath.row]
             cell.configureViaStorage(post: post)
-        }
         return cell
     }
     
@@ -333,27 +277,6 @@ extension ProfileViewController: UITableViewDelegate {
         return nil
     }
     
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        if favorites {
-            return UISwipeActionsConfiguration(actions: [
-                makeDeleteContextualAction(forRowAt: indexPath)
-            ])
-        } else { return nil }
-    }
-
-    //MARK: - Contextual Actions
-    private func makeDeleteContextualAction(forRowAt indexPath: IndexPath) -> UIContextualAction {
-        return UIContextualAction(style: .destructive, title: "Delete") { (action, swipeButtonView, completion) in
-            print("Свайпнули удалить")
-            let post = self.common.fetchData(predicate: self.favorites ? self.tableFavoritesPredicate : nil)[indexPath.row]
-
-            self.coreDataManager.delete(object: post)
-            print("Пост \(post.author ?? "Неизвестный") добавлен в Избранное: favorites \(self.common.fetchData(predicate: self.favorites ? self.tableFavoritesPredicate : nil).count)")
-            completion(true)
-            self.reloadTable()
-        }
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! PostTableViewCell
         
@@ -361,14 +284,7 @@ extension ProfileViewController: UITableViewDelegate {
             return
         }
         
-        let post = StoragePost(author: name, title: title, image: image, likes: getInt(text: likes), views: getInt(text: views))
+        let post = StoragePost(author: name, title: title, image: image, likes: common.getInt(text: likes), views: common.getInt(text: views))
         selectedPost = post
-    }
-    
-    private func getInt(text: String) -> Int64 {
-        guard let number = Int64(text.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) else {
-            fatalError()
-        }
-        return number
     }
 }
