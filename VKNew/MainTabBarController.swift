@@ -9,6 +9,8 @@ import UIKit
 
 class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     
+    private let coreDataManager = CoreDataStack(modelName: "PostModel")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
@@ -17,8 +19,8 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let itemMain = MainViewController()
-        let itemProfile = ProfileViewController()
-        let itemSaved = SavedPostViewController()
+        let itemProfile = ProfileViewController(title: "Профиль", manager: coreDataManager)
+        let itemSaved = UINavigationController(rootViewController: ProfileViewController(withCoreData: true, title: "Сохраненные", manager: coreDataManager))
     
         itemMain.tabBarItem = UITabBarItem(title: "Главная", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house"))
         itemProfile.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.crop.circle"), selectedImage: UIImage(systemName: "person.crop.circle"))
