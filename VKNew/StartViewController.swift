@@ -26,29 +26,28 @@ class StartViewController: UIViewController {
         logoImage.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(view).offset(113)
             make.height.equalTo(344)
-            make.leading.equalTo(view).offset(15)
-            make.trailing.equalTo(view).offset(-16)
+            make.width.equalTo(344)
+            make.centerX.equalTo(view)
         }
         
         regButton.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(logoImage.snp.bottom).offset(81)
             make.height.equalTo(47)
-            make.leading.equalTo(view).offset(57)
-            make.trailing.equalTo(view).offset(-58)
+            make.width.equalTo(260)
+            make.centerX.equalTo(view)
         }
 
         loginLabel.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(regButton.snp.bottom).offset(40)
             make.height.equalTo(20)
-            make.leading.equalTo(view).offset(148)
-            make.trailing.equalTo(view).offset(-129)
+            make.width.equalTo(150)
+            make.centerX.equalTo(view)
         }
     }
     
     private lazy var logoImage: UIView = {
         let view = UIImageView()
-        let image = UIImage(named: "logo")
-        view.image = image;
+        view.image = #imageLiteral(resourceName: "startImage")
         view.toAutoLayout()
         return view
     }()
@@ -71,8 +70,9 @@ class StartViewController: UIViewController {
         view.font = UIFont(name: "Inter-Regular", size: 14)
         var paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.18
+        view.textAlignment = .center
 
-        view.attributedText = NSMutableAttributedString(string: "Уже есть аккаунт ", attributes: [NSAttributedString.Key.kern: -0.17, NSAttributedString.Key.paragraphStyle: paragraphStyle])
+        view.attributedText = NSMutableAttributedString(string: "Уже есть аккаунт", attributes: [NSAttributedString.Key.kern: -0.17, NSAttributedString.Key.paragraphStyle: paragraphStyle])
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(loginButtonPressed))
         view.isUserInteractionEnabled = true
@@ -83,10 +83,16 @@ class StartViewController: UIViewController {
     
     @objc func registrationButtonPressed() {
         print("Нажали кнопку регистрации")
+        let vc = RegistrationViewController()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: false, completion: nil)
     }
     
     @objc func loginButtonPressed() {
         print("Нажали кнопку login")
+        let vc = LoginViewController()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: false, completion: nil)
     }
 }
 
