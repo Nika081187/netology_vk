@@ -18,9 +18,9 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let itemMain = MainViewController()
+        let itemMain = MainViewController(title: "Главная", manager: coreDataManager)
         let itemProfile = ProfileViewController(title: "Профиль", manager: coreDataManager)
-        let itemSaved = UINavigationController(rootViewController: ProfileViewController(withCoreData: true, title: "Сохраненные", manager: coreDataManager))
+        let itemSaved = SavedPostViewController()
     
         itemMain.tabBarItem = UITabBarItem(title: "Главная", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house"))
         itemProfile.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.crop.circle"), selectedImage: UIImage(systemName: "person.crop.circle"))

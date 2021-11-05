@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0E5BA0618299F577D0D2B586 /* Pods_VKNew.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6EA40933749CCE9700929BE /* Pods_VKNew.framework */; };
+		2899659027357DA000C2FB7E /* CommonFuncs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2899658F27357DA000C2FB7E /* CommonFuncs.swift */; };
 		28F0A39627350E5700679CEC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F0A39527350E5700679CEC /* AppDelegate.swift */; };
 		28F0A39827350E5700679CEC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F0A39727350E5700679CEC /* SceneDelegate.swift */; };
 		28F0A39A27350E5700679CEC /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F0A39927350E5700679CEC /* StartViewController.swift */; };
@@ -37,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		20FB4FA6E3B82B1F30F474DC /* Pods-VKNew.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VKNew.debug.xcconfig"; path = "Target Support Files/Pods-VKNew/Pods-VKNew.debug.xcconfig"; sourceTree = "<group>"; };
+		2899658F27357DA000C2FB7E /* CommonFuncs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFuncs.swift; sourceTree = "<group>"; };
 		28F0A39227350E5700679CEC /* VKNew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKNew.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F0A39527350E5700679CEC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		28F0A39727350E5700679CEC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -80,6 +82,57 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2899658A27357A7C00C2FB7E /* profile */ = {
+			isa = PBXGroup;
+			children = (
+				2899658E27357B1100C2FB7E /* storage */,
+				28F0A3CC2735457300679CEC /* ProfilePhotoStackView.swift */,
+				28F0A3D0273545A200679CEC /* PhotosCollectionViewCell.swift */,
+				28F0A3D4273545F300679CEC /* PhotoStorage.swift */,
+				28F0A3C82735454200679CEC /* PostTableViewCell.swift */,
+				28F0A3CE2735458A00679CEC /* PhotosViewController.swift */,
+				28F0A3CA2735455D00679CEC /* ProfileTableHederView.swift */,
+				28F0A3B827353E9900679CEC /* ProfileViewController.swift */,
+			);
+			path = profile;
+			sourceTree = "<group>";
+		};
+		2899658B27357A8900C2FB7E /* auth */ = {
+			isa = PBXGroup;
+			children = (
+				28F0A3AC27350E9F00679CEC /* RegistrationViewController.swift */,
+				28F0A3B227351F7D00679CEC /* AcceptRegistrationViewController.swift */,
+				28F0A39927350E5700679CEC /* StartViewController.swift */,
+				28F0A3AE27350EA900679CEC /* LoginViewController.swift */,
+			);
+			path = auth;
+			sourceTree = "<group>";
+		};
+		2899658C27357A9600C2FB7E /* main */ = {
+			isa = PBXGroup;
+			children = (
+				28F0A3B627353E5500679CEC /* MainViewController.swift */,
+			);
+			path = main;
+			sourceTree = "<group>";
+		};
+		2899658D27357AA000C2FB7E /* saved */ = {
+			isa = PBXGroup;
+			children = (
+				28F0A3BA27353EB500679CEC /* SavedPostViewController.swift */,
+			);
+			path = saved;
+			sourceTree = "<group>";
+		};
+		2899658E27357B1100C2FB7E /* storage */ = {
+			isa = PBXGroup;
+			children = (
+				28F0A3D2273545C300679CEC /* Storage.swift */,
+				28F0A3BC273544D000679CEC /* StoragePost.swift */,
+			);
+			path = storage;
+			sourceTree = "<group>";
+		};
 		28F0A38927350E5700679CEC = {
 			isa = PBXGroup;
 			children = (
@@ -103,23 +156,13 @@
 			children = (
 				28F0A39527350E5700679CEC /* AppDelegate.swift */,
 				28F0A39727350E5700679CEC /* SceneDelegate.swift */,
-				28F0A3AC27350E9F00679CEC /* RegistrationViewController.swift */,
-				28F0A39927350E5700679CEC /* StartViewController.swift */,
+				2899658D27357AA000C2FB7E /* saved */,
+				2899658C27357A9600C2FB7E /* main */,
+				2899658B27357A8900C2FB7E /* auth */,
+				2899658A27357A7C00C2FB7E /* profile */,
 				28F0A3BE2735452600679CEC /* CoreDataManager */,
-				28F0A3AE27350EA900679CEC /* LoginViewController.swift */,
-				28F0A3B627353E5500679CEC /* MainViewController.swift */,
-				28F0A3CC2735457300679CEC /* ProfilePhotoStackView.swift */,
-				28F0A3D0273545A200679CEC /* PhotosCollectionViewCell.swift */,
-				28F0A3D4273545F300679CEC /* PhotoStorage.swift */,
-				28F0A3C82735454200679CEC /* PostTableViewCell.swift */,
-				28F0A3CE2735458A00679CEC /* PhotosViewController.swift */,
-				28F0A3D2273545C300679CEC /* Storage.swift */,
-				28F0A3CA2735455D00679CEC /* ProfileTableHederView.swift */,
 				28F0A3B427353E1C00679CEC /* MainTabBarController.swift */,
-				28F0A3BA27353EB500679CEC /* SavedPostViewController.swift */,
-				28F0A3BC273544D000679CEC /* StoragePost.swift */,
-				28F0A3B827353E9900679CEC /* ProfileViewController.swift */,
-				28F0A3B227351F7D00679CEC /* AcceptRegistrationViewController.swift */,
+				2899658F27357DA000C2FB7E /* CommonFuncs.swift */,
 				28F0A3A127350E5D00679CEC /* Assets.xcassets */,
 				28F0A3A327350E5D00679CEC /* LaunchScreen.storyboard */,
 				28F0A3A627350E5D00679CEC /* Info.plist */,
@@ -289,6 +332,7 @@
 				28F0A3BD273544D000679CEC /* StoragePost.swift in Sources */,
 				28F0A39627350E5700679CEC /* AppDelegate.swift in Sources */,
 				28F0A3B727353E5500679CEC /* MainViewController.swift in Sources */,
+				2899659027357DA000C2FB7E /* CommonFuncs.swift in Sources */,
 				28F0A3C72735452600679CEC /* Post+CoreDataClass.swift in Sources */,
 				28F0A39827350E5700679CEC /* SceneDelegate.swift in Sources */,
 				28F0A3AD27350E9F00679CEC /* RegistrationViewController.swift in Sources */,

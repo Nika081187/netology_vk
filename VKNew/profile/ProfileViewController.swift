@@ -6,10 +6,9 @@
 //
 
 import UIKit
-import CoreData
 
 @available(iOS 13.0, *)
-class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegate {
+class ProfileViewController: UIViewController {
     
     private let screenRect = UIScreen.main.bounds
     private lazy var screenWidth = screenRect.size.width
@@ -22,8 +21,7 @@ class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegat
     private let table = UITableView(frame: .zero, style: .grouped)
     private var coreDataManager: CoreDataStack!
     private var tableFavoritesPredicate: NSPredicate?
-    
-    var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>!
+    private let common = CommonFuncs()
     
     private var reuseId: String {
         String(describing: PostTableViewCell.self)
@@ -54,25 +52,8 @@ class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegat
     
     func reloadTable() {
         print("Перезагружаем таблицу постов")
-        Storage.favoritePosts = self.convertCoreDataPostsToStoragePost(posts: fetchData(predicate: (favorites ? tableFavoritesPredicate : nil)))
+        Storage.favoritePosts = self.common.convertCoreDataPostsToStoragePost(posts: common.fetchData(predicate: (favorites ? tableFavoritesPredicate : nil)))
         table.reloadData()
-    }
-    
-    func convertCoreDataPostsToStoragePost(posts: [Post]?) -> [StoragePost] {
-        var favoritePosts = [StoragePost]()
-        
-        guard let postsFromCoreData = posts else {
-            return favoritePosts
-        }
-        for post in postsFromCoreData {
-            guard let author = post.author, let title = post.title, let image = post.image, let data = UIImage(data: image) else {
-                return favoritePosts
-            }
-            let pst = StoragePost(author: author, title: title, image: data,
-                                  likes: post.likes, views: post.views)
-            favoritePosts.append(pst)
-        }
-        return favoritePosts
     }
     
     override func viewDidLoad() {
@@ -101,33 +82,6 @@ class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegat
 
             navBar.setItems([navItem], animated: false)
         }
-    }
-    
-    func fetchData(predicate: NSPredicate?) -> [Post] {
-        if fetchedResultsController == nil {
-            let context = coreDataManager.persistentStoreContainer.viewContext
-            let entityDescription = NSEntityDescription.entity(forEntityName: "Post", in: context)
-            let request = NSFetchRequest<NSFetchRequestResult>()
-
-            request.entity = entityDescription
-            request.predicate = predicate
-            request.fetchLimit = 20
-            request.fetchBatchSize = 20
-            
-            let nameSortDescriptor = NSSortDescriptor(key: "author", ascending: true)
-            request.sortDescriptors = [nameSortDescriptor]
-            
-            fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: coreDataManager.persistentStoreContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-            
-
-            fetchedResultsController.delegate = self
-        }
-        do {
-            try fetchedResultsController.performFetch()
-        } catch {
-            print("Fetch failed")
-        }
-        return fetchedResultsController.fetchedObjects as! [Post]
     }
     
     @objc func showFilterAlert() {
@@ -209,7 +163,7 @@ class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegat
         pst.likes = post.likes
         
         coreDataManager.save()
-        print("Пост \(post.author) добавлен в Избранное: favorites \(fetchData(predicate: (favorites ? tableFavoritesPredicate : nil)).count)")
+        print("Пост \(post.author) добавлен в Избранное: favorites \(common.fetchData(predicate: (favorites ? tableFavoritesPredicate : nil)).count)")
         table.reloadData()
     }
     
@@ -338,7 +292,7 @@ extension ProfileViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard section == 0 else {
             if favorites {
-                let count = fetchData(predicate: favorites ? tableFavoritesPredicate : nil).count
+                let count = common.fetchData(predicate: favorites ? tableFavoritesPredicate : nil).count
                 print("Количество постов в favorites: \(count)")
                 return count
             } else {
@@ -351,8 +305,8 @@ extension ProfileViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: PostTableViewCell = tableView.dequeueReusableCell(withIdentifier: reuseId, for: indexPath) as! PostTableViewCell
         if favorites {
-            let post = fetchData(predicate: (favorites ? tableFavoritesPredicate : nil))[indexPath.row]
-            cell.configureViaCoreData(post: post as! Post)
+            let post = common.fetchData(predicate: (favorites ? tableFavoritesPredicate : nil))[indexPath.row]
+            cell.configureViaCoreData(post: post )
         } else {
             let post = Storage.posts[indexPath.row]
             cell.configureViaStorage(post: post)
@@ -391,10 +345,10 @@ extension ProfileViewController: UITableViewDelegate {
     private func makeDeleteContextualAction(forRowAt indexPath: IndexPath) -> UIContextualAction {
         return UIContextualAction(style: .destructive, title: "Delete") { (action, swipeButtonView, completion) in
             print("Свайпнули удалить")
-            let post = self.fetchData(predicate: self.favorites ? self.tableFavoritesPredicate : nil)[indexPath.row]
+            let post = self.common.fetchData(predicate: self.favorites ? self.tableFavoritesPredicate : nil)[indexPath.row]
 
             self.coreDataManager.delete(object: post)
-            print("Пост \(post.author ?? "Неизвестный") добавлен в Избранное: favorites \(self.fetchData(predicate: self.favorites ? self.tableFavoritesPredicate : nil).count)")
+            print("Пост \(post.author ?? "Неизвестный") добавлен в Избранное: favorites \(self.common.fetchData(predicate: self.favorites ? self.tableFavoritesPredicate : nil).count)")
             completion(true)
             self.reloadTable()
         }
