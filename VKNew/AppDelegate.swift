@@ -8,18 +8,21 @@
 import UIKit
 import CoreData
 
-@main
+@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        self.window = UIWindow(frame: UIScreen.main.bounds)
-        let nav1 = Navigation()
-        let mainView = StartViewController(nibName: nil, bundle: nil)
-        nav1.viewControllers = [mainView]
-        self.window!.rootViewController = nav1
-        self.window?.makeKeyAndVisible()
+        window = UIWindow(frame: UIScreen.main.bounds)
+
+        let mainViewController = StartViewController()
+
+        let navigationController = UINavigationController(rootViewController: mainViewController)
+
+        window?.rootViewController = navigationController
+        window?.makeKeyAndVisible()
+
         return true
     }
     // MARK: UISceneSession Lifecycle
