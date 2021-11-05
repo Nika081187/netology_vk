@@ -203,6 +203,8 @@ class AcceptRegistrationViewController: UIViewController {
     
     @objc func loginButtonPressed() {
         print("Нажали кнопку регистрации")
+        let vc = MainTabBarController()
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

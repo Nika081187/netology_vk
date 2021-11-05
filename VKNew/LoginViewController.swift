@@ -121,6 +121,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         label.textColor = UIColor(red: 0.149, green: 0.196, blue: 0.22, alpha: 1)
         label.font = UIFont(name: "Inter-Regular", size: 14)
         
+        label.layer.masksToBounds = false
+        label.layer.shadowColor = UIColor.systemGray2.cgColor
+        label.layer.shadowOpacity = 1
+        label.layer.shadowOffset = CGSize(width: -2, height: 2)
+        label.layer.shadowRadius = 3
+        label.layer.shouldRasterize = true
+        
         return label
     }()
     
@@ -172,6 +179,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     @objc func loginButtonPressed() {
         print("Нажали кнопку логина")
+        let vc = MainTabBarController()
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
