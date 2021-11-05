@@ -84,15 +84,13 @@ class StartViewController: UIViewController {
     @objc func registrationButtonPressed() {
         print("Нажали кнопку регистрации")
         let vc = RegistrationViewController()
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: false, completion: nil)
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     @objc func loginButtonPressed() {
         print("Нажали кнопку login")
         let vc = LoginViewController()
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: false, completion: nil)
+        navigationController?.pushViewController(vc, animated: false)
     }
 }
 

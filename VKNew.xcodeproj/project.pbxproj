@@ -16,7 +16,6 @@
 		28F0A3A527350E5D00679CEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28F0A3A327350E5D00679CEC /* LaunchScreen.storyboard */; };
 		28F0A3AD27350E9F00679CEC /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F0A3AC27350E9F00679CEC /* RegistrationViewController.swift */; };
 		28F0A3AF27350EA900679CEC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F0A3AE27350EA900679CEC /* LoginViewController.swift */; };
-		28F0A3B1273513C600679CEC /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F0A3B0273513C600679CEC /* Navigation.swift */; };
 		28F0A3B327351F7D00679CEC /* AcceptRegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F0A3B227351F7D00679CEC /* AcceptRegistrationViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -32,7 +31,6 @@
 		28F0A3A627350E5D00679CEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		28F0A3AC27350E9F00679CEC /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		28F0A3AE27350EA900679CEC /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		28F0A3B0273513C600679CEC /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
 		28F0A3B227351F7D00679CEC /* AcceptRegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptRegistrationViewController.swift; sourceTree = "<group>"; };
 		60F8287DBA1E5764B881B2AE /* Pods-VKNew.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VKNew.release.xcconfig"; path = "Target Support Files/Pods-VKNew/Pods-VKNew.release.xcconfig"; sourceTree = "<group>"; };
 		C6EA40933749CCE9700929BE /* Pods_VKNew.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VKNew.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -77,7 +75,6 @@
 				28F0A39927350E5700679CEC /* StartViewController.swift */,
 				28F0A3AE27350EA900679CEC /* LoginViewController.swift */,
 				28F0A3B227351F7D00679CEC /* AcceptRegistrationViewController.swift */,
-				28F0A3B0273513C600679CEC /* Navigation.swift */,
 				28F0A3A127350E5D00679CEC /* Assets.xcassets */,
 				28F0A3A327350E5D00679CEC /* LaunchScreen.storyboard */,
 				28F0A3A627350E5D00679CEC /* Info.plist */,
@@ -218,7 +215,6 @@
 			files = (
 				28F0A3AF27350EA900679CEC /* LoginViewController.swift in Sources */,
 				28F0A39A27350E5700679CEC /* StartViewController.swift in Sources */,
-				28F0A3B1273513C600679CEC /* Navigation.swift in Sources */,
 				28F0A3B327351F7D00679CEC /* AcceptRegistrationViewController.swift in Sources */,
 				28F0A3A027350E5700679CEC /* VKNew.xcdatamodeld in Sources */,
 				28F0A39627350E5700679CEC /* AppDelegate.swift in Sources */,

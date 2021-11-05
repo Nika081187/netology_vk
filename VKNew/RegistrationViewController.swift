@@ -216,8 +216,7 @@ class RegistrationViewController: UIViewController, UITextFieldDelegate, UIScrol
     @objc func nextButtonPressed() {
         print("Нажали кнопку логина")
         let vc = AcceptRegistrationViewController()
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: false, completion: nil)
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
