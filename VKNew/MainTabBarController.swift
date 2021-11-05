@@ -7,19 +7,18 @@
 
 import UIKit
 
-class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
-    
-    private let coreDataManager = CoreDataStack(modelName: "PostModel")
+let coreDataManager = CoreDataStack(modelName: "PostModel")
+
+class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let itemMain = MainViewController(manager: coreDataManager)
-        let itemProfile = ProfileViewController(manager: coreDataManager)
+        let itemMain = MainViewController()
+        let itemProfile = ProfileViewController()
         let itemSaved = SavedPostViewController()
     
         itemMain.tabBarItem = UITabBarItem(title: "Главная", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house"))
@@ -28,11 +27,5 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         
         let controllers = [itemMain, itemProfile, itemSaved]
         self.viewControllers = controllers
-    }
-
-    //Delegate methods
-    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        print("Should select viewController: \(viewController.title ?? "") ?")
-        return true;
     }
 }

@@ -10,7 +10,6 @@ import UIKit
 class SavedPostViewController: UIViewController {
     
     private let table = UITableView(frame: .zero, style: .grouped)
-    private var coreDataManager: CoreDataStack!
     private var tableFavoritesPredicate: NSPredicate?
     private let common = CommonFuncs()
     
@@ -18,18 +17,14 @@ class SavedPostViewController: UIViewController {
         String(describing: PostTableViewCell.self)
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        print(type(of: self), #function)
+    override func viewDidAppear(_ animated: Bool) {
+        reloadTable()
     }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    init(withCoreData: Bool = false, manager: CoreDataStack) {
-        super.init(nibName: nil, bundle: nil)
-        coreDataManager = manager
+
+    func reloadTable() {
+        print("Перезагружаем таблицу постов")
+        Storage.favoritePosts = self.common.convertCoreDataPostsToStoragePost(posts: common.fetchData(predicate: tableFavoritesPredicate))
+        table.reloadData()
     }
 
     override func viewDidLoad() {
@@ -61,12 +56,6 @@ class SavedPostViewController: UIViewController {
         reloadTable()
     }
     
-    func reloadTable() {
-        print("Перезагружаем таблицу постов")
-        Storage.favoritePosts = self.common.convertCoreDataPostsToStoragePost(posts: common.fetchData(predicate: tableFavoritesPredicate))
-        table.reloadData()
-    }
-    
     @objc func showFilterAlert() {
         let ac = UIAlertController(title: "Enter author name", message: nil, preferredStyle: .alert)
         ac.addTextField()
@@ -93,7 +82,6 @@ class SavedPostViewController: UIViewController {
         table.estimatedRowHeight = 250
         table.register(PostTableViewCell.self, forCellReuseIdentifier: reuseId)
         table.dataSource = self
-        table.delegate = self
         table.backgroundColor = .white
     }
     
@@ -128,15 +116,5 @@ extension SavedPostViewController: UITableViewDataSource {
         let post = common.fetchData(predicate: tableFavoritesPredicate)[indexPath.row]
         cell.configureViaCoreData(post: post )
         return cell
-    }
-}
-
-@available(iOS 13.0, *)
-extension SavedPostViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        return UISwipeActionsConfiguration(actions: [
-            common.makeDeleteContextualAction(forRowAt: indexPath, predicate: tableFavoritesPredicate!)
-//            self.reloadTable()
-        ])
     }
 }

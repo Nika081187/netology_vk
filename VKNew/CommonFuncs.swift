@@ -62,16 +62,4 @@ class CommonFuncs: NSObject, NSFetchedResultsControllerDelegate {
         }
         return number
     }
-    
-    //MARK: - Contextual Actions
-    func makeDeleteContextualAction(forRowAt indexPath: IndexPath, predicate: NSPredicate) -> UIContextualAction {
-        return UIContextualAction(style: .destructive, title: "Delete") { (action, swipeButtonView, completion) in
-            print("Свайпнули удалить")
-            let post = self.fetchData(predicate: predicate)[indexPath.row]
-
-            self.coreDataManager.delete(object: post)
-            print("Пост \(post.author ?? "Неизвестный") добавлен в Избранное: favorites \(self.fetchData(predicate: predicate).count)")
-            completion(true)
-        }
-    }
 }

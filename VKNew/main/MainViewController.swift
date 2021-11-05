@@ -14,10 +14,8 @@ class MainViewController: UIViewController {
     private lazy var screenHeight = screenRect.size.height
     private var selectedPost: StoragePost!
     private var addedPostTitles = [String]()
-    private var favorites: Bool = false
     private var tapped = false
     private let table = UITableView(frame: .zero, style: .grouped)
-    private var coreDataManager: CoreDataStack!
     private var tableFavoritesPredicate: NSPredicate?
     private let common = CommonFuncs()
     
@@ -36,22 +34,6 @@ class MainViewController: UIViewController {
         super.init(coder: coder)
     }
     
-    init(withCoreData: Bool = false, manager: CoreDataStack) {
-        super.init(nibName: nil, bundle: nil)
-        favorites = withCoreData
-        coreDataManager = manager
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        reloadTable()
-    }
-    
-    func reloadTable() {
-        print("Перезагружаем таблицу постов")
-        Storage.favoritePosts = self.common.convertCoreDataPostsToStoragePost(posts: common.fetchData(predicate: (favorites ? tableFavoritesPredicate : nil)))
-        table.reloadData()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(table)
@@ -61,21 +43,6 @@ class MainViewController: UIViewController {
         tableSetup()
         setupLayout()
         gestureRecognizerSetup()
-        
-        if favorites {
-            let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44))
-            
-            view.addSubview(navBar)
-
-            let navItem = UINavigationItem()
-            let doneItem = UIBarButtonItem(title: "Find", style: .plain, target: nil, action: #selector(showFilterAlert))
-            let photoItem = UIBarButtonItem(title: "Clear filter", style: .plain, target: nil, action: #selector(clearFilterButtonClicked))
-
-            navItem.rightBarButtonItem = doneItem
-            navItem.leftBarButtonItem = photoItem
-
-            navBar.setItems([navItem], animated: false)
-        }
     }
     
     @objc func showFilterAlert() {
@@ -94,13 +61,11 @@ class MainViewController: UIViewController {
     func showAuthor(name: String) {
         print("Показываем посты с определенным автором")
         tableFavoritesPredicate = NSPredicate(format: "author = %s", argumentArray: [name])
-        reloadTable()
     }
     
     @objc func clearFilterButtonClicked() {
         print("Очищаем фильтр по автору")
         tableFavoritesPredicate = nil
-        reloadTable()
     }
     
     func tableSetup() {
@@ -149,7 +114,7 @@ class MainViewController: UIViewController {
         pst.likes = post.likes
         
         coreDataManager.save()
-        print("Пост \(post.author) добавлен в Избранное: favorites \(common.fetchData(predicate: (favorites ? tableFavoritesPredicate : nil)).count)")
+        print("Пост \(post.author) добавлен в Избранное: favorites \(common.fetchData(predicate: nil).count)")
         table.reloadData()
     }
 }
@@ -164,26 +129,15 @@ extension MainViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard section == 0 else {
-            if favorites {
-                let count = common.fetchData(predicate: favorites ? tableFavoritesPredicate : nil).count
-                print("Количество постов в favorites: \(count)")
-                return count
-            } else {
-                return Storage.posts.count
-            }
+            return Storage.posts.count
         }
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: PostTableViewCell = tableView.dequeueReusableCell(withIdentifier: reuseId, for: indexPath) as! PostTableViewCell
-        if favorites {
-            let post = common.fetchData(predicate: (favorites ? tableFavoritesPredicate : nil))[indexPath.row]
-            cell.configureViaCoreData(post: post)
-        } else {
-            let post = Storage.posts[indexPath.row]
-            cell.configureViaStorage(post: post)
-        }
+        let post = Storage.posts[indexPath.row]
+        cell.configureViaStorage(post: post)
         return cell
     }
     
@@ -200,27 +154,6 @@ extension MainViewController: UITableViewDelegate {
             return photos
         }
         return nil
-    }
-    
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        if favorites {
-            return UISwipeActionsConfiguration(actions: [
-                makeDeleteContextualAction(forRowAt: indexPath)
-            ])
-        } else { return nil }
-    }
-
-    //MARK: - Contextual Actions
-    private func makeDeleteContextualAction(forRowAt indexPath: IndexPath) -> UIContextualAction {
-        return UIContextualAction(style: .destructive, title: "Delete") { (action, swipeButtonView, completion) in
-            print("Свайпнули удалить")
-            let post = self.common.fetchData(predicate: self.favorites ? self.tableFavoritesPredicate : nil)[indexPath.row]
-
-            self.coreDataManager.delete(object: post)
-            print("Пост \(post.author ?? "Неизвестный") добавлен в Избранное: favorites \(self.common.fetchData(predicate: self.favorites ? self.tableFavoritesPredicate : nil).count)")
-            completion(true)
-            self.reloadTable()
-        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

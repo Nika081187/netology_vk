@@ -18,7 +18,6 @@ class ProfileViewController: UIViewController {
     private var titleText = ""
     private var tapped = false
     private let table = UITableView(frame: .zero, style: .grouped)
-    private var coreDataManager: CoreDataStack!
     private let common = CommonFuncs()
     
     private var reuseId: String {
@@ -27,30 +26,6 @@ class ProfileViewController: UIViewController {
     
     private lazy var header = ProfileTableHederView()
     private lazy var photos = ProfilePhotoStackView()
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        print(type(of: self), #function)
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    init(withCoreData: Bool = false, manager: CoreDataStack) {
-        super.init(nibName: nil, bundle: nil)
-        coreDataManager = manager
-    }
-    
-//    override func viewDidAppear(_ animated: Bool) {
-//        reloadTable()
-//    }
-//
-//    func reloadTable() {
-//        print("Перезагружаем таблицу постов")
-//        Storage.favoritePosts = self.common.convertCoreDataPostsToStoragePost(posts: common.fetchData(predicate: (favorites ? tableFavoritesPredicate : nil)))
-//        table.reloadData()
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

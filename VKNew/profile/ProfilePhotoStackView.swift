@@ -15,15 +15,16 @@ class ProfilePhotoStackView: UIView {
         let photoLabel = UILabel()
         photoLabel.toAutoLayout()
         photoLabel.textColor = .black
-        photoLabel.text = "Photos"
-        photoLabel.font = UIFont.boldSystemFont(ofSize: 24.0)
+        photoLabel.text = "Фотографии \(PhotoStorage().photos.count)"
+        photoLabel.font = UIFont.boldSystemFont(ofSize: 15)
         return photoLabel
     }()
     
     private lazy var arrowButton: UIButton = {
         let arrowButton = UIButton()
         arrowButton.toAutoLayout()
-        arrowButton.setImage(UIImage(systemName: "questionmark")!, for: .normal)
+        arrowButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
+        arrowButton.tintColor = .black
         arrowButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         return arrowButton
     }()
@@ -85,8 +86,8 @@ class ProfilePhotoStackView: UIView {
             
             arrowButton.centerYAnchor.constraint(equalTo: photoLabel.centerYAnchor),
             arrowButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -(baseOffset)),
-            arrowButton.heightAnchor.constraint(equalToConstant: 20),
-            arrowButton.widthAnchor.constraint(equalToConstant: 20),
+            arrowButton.heightAnchor.constraint(equalToConstant: 24),
+            arrowButton.widthAnchor.constraint(equalToConstant: 15),
             
             photoStackView.topAnchor.constraint(equalTo: photoLabel.bottomAnchor, constant: baseOffset),
             photoStackView.widthAnchor.constraint(equalToConstant: self.frame.width),

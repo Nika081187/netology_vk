@@ -88,7 +88,6 @@
 				2899658E27357B1100C2FB7E /* storage */,
 				28F0A3CC2735457300679CEC /* ProfilePhotoStackView.swift */,
 				28F0A3D0273545A200679CEC /* PhotosCollectionViewCell.swift */,
-				28F0A3D4273545F300679CEC /* PhotoStorage.swift */,
 				28F0A3C82735454200679CEC /* PostTableViewCell.swift */,
 				28F0A3CE2735458A00679CEC /* PhotosViewController.swift */,
 				28F0A3CA2735455D00679CEC /* ProfileTableHederView.swift */,
@@ -128,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				28F0A3D2273545C300679CEC /* Storage.swift */,
+				28F0A3D4273545F300679CEC /* PhotoStorage.swift */,
 				28F0A3BC273544D000679CEC /* StoragePost.swift */,
 			);
 			path = storage;

@@ -14,10 +14,12 @@ class ProfileTableHederView: UIView {
         super.init(frame: frame)
         addSubview(cont)
         
-        cont.addSubview(statusTextField)
+        cont.addSubview(infoLabel)
         cont.addSubview(statusButton)
         cont.addSubview(nameLabel)
         cont.addSubview(avatarImage)
+        cont.addSubview(jobLabel)
+        cont.addSubview(infoImage)
         setupLayout()
     }
     
@@ -28,14 +30,13 @@ class ProfileTableHederView: UIView {
     private lazy var cont: UIView = {
         let view = UIView()
         view.toAutoLayout()
-        view.backgroundColor = UIColor.systemGray5
         return view
     }()
     
     public lazy var avatarImage: UIImageView = {
         let avatarImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         avatarImage.toAutoLayout()
-        avatarImage.image = UIImage(systemName: "questionmark")!
+        avatarImage.image = #imageLiteral(resourceName: "avatar")
         avatarImage.contentMode = .scaleAspectFill
         avatarImage.tintColor = .white
         avatarImage.layer.borderWidth = 3
@@ -49,37 +50,49 @@ class ProfileTableHederView: UIView {
     private lazy var nameLabel: UILabel = {
         let nameLabel = UILabel()
         nameLabel.toAutoLayout()
-        nameLabel.text = "Hysterical Cat"
+        nameLabel.text = "Анна Иванова"
         nameLabel.textColor = .black
-        nameLabel.font = UIFont.boldSystemFont(ofSize: 18.0)
+        nameLabel.font = UIFont.boldSystemFont(ofSize: 22)
         return nameLabel
     }()
     
-    private lazy var statusTextField: UITextField = {
-        let statusText = UITextField()
-        statusText.toAutoLayout()
-        statusText.font = UIFont.boldSystemFont(ofSize: 14.0)
-        statusText.textColor = .darkGray
-        statusText.placeholder = "Waiting for something..."
-        statusText.isEnabled = true
-        return statusText
+    private lazy var jobLabel: UILabel = {
+        let nameLabel = UILabel()
+        nameLabel.toAutoLayout()
+        nameLabel.text = "инженер"
+        nameLabel.textColor = .lightGray
+        nameLabel.font = UIFont.boldSystemFont(ofSize: 12)
+        return nameLabel
+    }()
+    
+    private lazy var infoLabel: UILabel = {
+        let label = UILabel()
+        label.toAutoLayout()
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .black
+        label.text = "Подробная информация"
+        return label
     }()
     
     private lazy var statusButton: UIButton = {
         let statusButton = UIButton()
         statusButton.toAutoLayout()
-        statusButton.backgroundColor = .systemBlue
-        statusButton.setTitle("Show status", for: .normal)
+        statusButton.layer.backgroundColor = UIColor(red: 1, green: 0.62, blue: 0.271, alpha: 1).cgColor
+        statusButton.setTitle("Редактировать", for: .normal)
         statusButton.setTitleColor(.white, for: .normal)
-        statusButton.layer.cornerRadius = 15
-        statusButton.layer.shadowOffset = CGSize(width: 4, height: 4)
-        statusButton.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1).cgColor
-        statusButton.layer.shadowOpacity = 0.7
-        statusButton.layer.shadowRadius = 4
+        statusButton.layer.cornerRadius = 10
         statusButton.layer.masksToBounds = false
         statusButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         statusButton.isEnabled = true
         return statusButton
+    }()
+    
+    private lazy var infoImage: UIView = {
+        let view = UIImageView()
+        view.image = UIImage(systemName: "exclamationmark.circle.fill")
+        view.tintColor = UIColor(red: 1, green: 0.62, blue: 0.271, alpha: 1)
+        view.toAutoLayout()
+        return view
     }()
     
     @objc func buttonPressed() {
@@ -101,19 +114,29 @@ class ProfileTableHederView: UIView {
             avatarImage.heightAnchor.constraint(equalToConstant: 100),
 
             statusButton.bottomAnchor.constraint(equalTo: cont.bottomAnchor, constant: -30),
-            statusButton.leadingAnchor.constraint(equalTo: cont.leadingAnchor, constant: 16),
-            statusButton.trailingAnchor.constraint(equalTo: cont.trailingAnchor, constant: -16),
+            statusButton.widthAnchor.constraint(equalToConstant: 344),
             statusButton.heightAnchor.constraint(equalToConstant: 50),
+            statusButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             
             nameLabel.topAnchor.constraint(equalTo: cont.topAnchor, constant: 27),
             nameLabel.centerXAnchor.constraint(equalTo: statusButton.centerXAnchor, constant: 30),
             nameLabel.widthAnchor.constraint(equalToConstant: 200),
             nameLabel.heightAnchor.constraint(equalToConstant: 30),
+            
+            jobLabel.bottomAnchor.constraint(equalTo: infoLabel.topAnchor, constant: -5),
+            jobLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            jobLabel.widthAnchor.constraint(equalToConstant: 57),
+            jobLabel.heightAnchor.constraint(equalToConstant: 15),
 
-            statusTextField.bottomAnchor.constraint(equalTo: statusButton.topAnchor, constant: -34),
-            statusTextField.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            statusTextField.widthAnchor.constraint(equalToConstant: 200),
-            statusTextField.heightAnchor.constraint(equalToConstant: 18),
+            infoLabel.bottomAnchor.constraint(equalTo: statusButton.topAnchor, constant: -34),
+            infoLabel.widthAnchor.constraint(equalToConstant: 200),
+            infoLabel.heightAnchor.constraint(equalToConstant: 18),
+            
+            infoImage.centerYAnchor.constraint(equalTo: infoLabel.centerYAnchor),
+            infoImage.trailingAnchor.constraint(equalTo: infoLabel.leadingAnchor, constant: -8),
+            infoImage.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            infoImage.widthAnchor.constraint(equalToConstant: 20),
+            infoImage.heightAnchor.constraint(equalToConstant: 20),
         ])
     }
 }
