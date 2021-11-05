@@ -1,15 +1,14 @@
 //
-//  ViewController.swift
-//  mega-meta
+//  AcceptRegistrationViewController.swift
+//  VKNew
 //
-//  Created by v.milchakova on 30.10.2021.
+//  Created by v.milchakova on 05.11.2021.
 //
 
 import UIKit
-import SnapKit
-import PhoneNumberKit
 
-class LoginViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate {
+class AcceptRegistrationViewController: UIViewController {
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -22,14 +21,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         view.addSubview(scrollView)
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
-        
-        scrollView.delegate = self
+
         scrollView.contentSize = view.frame.size
         
         scrollView.addSubview(titleLabel)
         scrollView.addSubview(descriptionLabel)
-        scrollView.addSubview(phoneTextField)
-        scrollView.addSubview(logInButton)
+        scrollView.addSubview(codeLabel)
+        scrollView.addSubview(codeTextField)
+        scrollView.addSubview(regButton)
+        scrollView.addSubview(checkImage)
 
         setConstraints()
     }
@@ -40,31 +40,45 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
 
         titleLabel.snp.makeConstraints { (make) -> Void in
-            make.top.equalTo(scrollView).offset(224)
-            make.leading.equalTo(view).offset(10)
-            make.trailing.equalTo(view).offset(-10)
+            make.top.equalTo(scrollView).offset(148)
+            make.width.equalTo(274)
+            make.centerX.equalTo(view)
             make.height.equalTo(22)
         }
         
         descriptionLabel.snp.makeConstraints { (make) -> Void in
-            make.top.equalTo(titleLabel.snp.bottom).offset(26)
-            make.height.equalTo(60)
-            make.leading.equalTo(view).offset(39)
-            make.trailing.equalTo(view).offset(-39)
+            make.top.equalTo(titleLabel.snp.bottom).offset(12)
+            make.height.equalTo(40)
+            make.width.equalTo(265)
+            make.centerX.equalTo(view)
+        }
+        
+        codeLabel.snp.makeConstraints { (make) -> Void in
+            make.bottom.equalTo(codeTextField.snp.top).offset(-5)
+            make.height.equalTo(15)
+            make.width.equalTo(150)
+            make.leading.equalTo(codeTextField)
         }
 
-        phoneTextField.snp.makeConstraints { (make) -> Void in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(12)
-            make.height.equalTo(48)
+        codeTextField.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(138)
+            make.height.equalTo(60)
             make.leading.equalTo(view).offset(57)
             make.trailing.equalTo(view).offset(-58)
         }
 
-        logInButton.snp.makeConstraints { (make) -> Void in
+        regButton.snp.makeConstraints { (make) -> Void in
             make.leading.equalTo(view).offset(93)
             make.trailing.equalTo(view).offset(-94)
-            make.top.equalTo(phoneTextField.snp.bottom).offset(148)
+            make.top.equalTo(codeTextField.snp.bottom).offset(86)
             make.height.equalTo(47)
+        }
+        
+        checkImage.snp.makeConstraints { (make) -> Void in
+            make.centerX.equalTo(view)
+            make.top.equalTo(regButton.snp.bottom).offset(43)
+            make.height.equalTo(100)
+            make.width.equalTo(86)
         }
     }
     
@@ -99,49 +113,59 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.toAutoLayout()
-        label.textColor = UIColor(red: 0.965, green: 0.592, blue: 0.027, alpha: 1)
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.textColor = UIColor(red: 0.965, green: 0.592, blue: 0.027, alpha: 1)
         label.font = UIFont(name: "Inter-SemiBold", size: 18)
-        label.attributedText = NSMutableAttributedString(string: "С возвращением", attributes: [NSAttributedString.Key.kern: 0.18])
+        label.attributedText = NSMutableAttributedString(string: "Подтверждение регистрации", attributes: [NSAttributedString.Key.kern: 0.18])
+        return label
+    }()
+    
+    private lazy var codeLabel: UILabel = {
+        let label = UILabel()
+        label.toAutoLayout()
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        label.textColor = UIColor(red: 0.495, green: 0.507, blue: 0.512, alpha: 1)
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.attributedText = NSMutableAttributedString(string: "Введите код из SMS", attributes: [NSAttributedString.Key.kern: 0.18])
         return label
     }()
     
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.toAutoLayout()
-        var paragraphStyle = NSMutableParagraphStyle()
-
-        paragraphStyle.lineHeightMultiple = 1.18
-
-        label.attributedText = NSMutableAttributedString(string: "Введите номер телефона для входа в приложение", attributes: [NSAttributedString.Key.kern: 0.14, NSAttributedString.Key.paragraphStyle: paragraphStyle])
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.textColor = .black
         label.lineBreakMode = .byWordWrapping
-        label.textColor = UIColor(red: 0.149, green: 0.196, blue: 0.22, alpha: 1)
-        label.font = UIFont(name: "Inter-Regular", size: 14)
+
+        var paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 1.18
+        paragraphStyle.alignment = NSTextAlignment.center
+
+        let normalText = "Мы отправили SMS с кодом на номер \n"
+        let attrs = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),
+                     NSAttributedString.Key.kern: 0.14,
+                     NSAttributedString.Key.paragraphStyle: paragraphStyle] as [NSAttributedString.Key : Any]
+        let attributedString = NSMutableAttributedString(string: normalText, attributes: attrs)
+
+        let boldText = "+38 099 999 99 99"
+        let normalString = NSMutableAttributedString(string: boldText, attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
+
+        attributedString.append(normalString)
+        label.attributedText = attributedString
         
         return label
     }()
     
-    private lazy var phoneTextField: PhoneNumberTextField = {
-        let field = PhoneNumberTextField()
-        field.delegate = self
+    private lazy var codeTextField: UITextField = {
+        let field = UITextField()
 
-        let phoneNumberKit = PhoneNumberKit()
-
-        do {
-            let phoneNumber = try phoneNumberKit.parse("(968) 321 15 95")
-            let phoneNumberCustomDefaultRegion = try phoneNumberKit.parse("(968) 321 15 95", withRegion: "RU", ignoreType: true)
-        }
-        catch {
-            print("Generic parser error")
-        }
-        
         field.textColor = .darkGray
         field.textAlignment = .center
         field.font = UIFont.systemFont(ofSize: 20)
-        field.maxDigits = 11
+        field.placeholder = "_ _ _ - _ _ _"
 
         field.layer.cornerRadius = 10
         field.layer.borderWidth = 1
@@ -155,10 +179,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         return field
     }()
     
-    private lazy var logInButton: UIButton = {
+    private lazy var regButton: UIButton = {
         let button = UIButton()
 
-        button.setTitle("ПОДТВЕРДИТЬ", for: .normal)
+        button.setTitle("ЗАРЕГИСТРИРОВАТЬСЯ", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel!.font = UIFont(name: "Inter-Medium", size: 16)
         
@@ -170,8 +194,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         return button
     }()
     
+    private lazy var checkImage: UIView = {
+        let view = UIImageView()
+        view.image = #imageLiteral(resourceName: "checkImage")
+        view.toAutoLayout()
+        return view
+    }()
+    
     @objc func loginButtonPressed() {
-        print("Нажали кнопку логина")
+        print("Нажали кнопку регистрации")
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -179,10 +210,4 @@ class LoginViewController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         let newLength = text.count + string.count - range.length
         return newLength <= 16
    }
-}
-
-extension UIView {
-    func toAutoLayout() {
-        self.translatesAutoresizingMaskIntoConstraints = false
-    }
 }

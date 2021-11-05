@@ -79,7 +79,6 @@ class RegistrationViewController: UIViewController, UITextFieldDelegate, UIScrol
         policyLabel.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(nextButton.snp.bottom).offset(20)
             make.height.equalTo(85)
-            //make.centerX.equalTo(view)
             make.leading.equalTo(view).offset(58)
             make.trailing.equalTo(view).offset(-59)
         }
@@ -87,22 +86,23 @@ class RegistrationViewController: UIViewController, UITextFieldDelegate, UIScrol
     
     @objc private func keyboardWillShow(notification: NSNotification){
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-//            scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
-//            scrollView.contentInset.bottom = keyboardSize.height
-            if self.view.frame.origin.y == 0{
-                self.view.frame.origin.y -= keyboardSize.height
-                
+            scrollView.contentInset.bottom = keyboardSize.height / 2
+            scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
+        }
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0 {
+                self.view.frame.origin.y -= keyboardSize.height / 2
             }
         }
     }
 
     @objc private func keyboardWillHide(notification: NSNotification){
+        scrollView.contentInset.bottom = 0
+        scrollView.verticalScrollIndicatorInsets = .zero
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y != 0 {
-                self.view.frame.origin.y += keyboardSize.height
+                self.view.frame.origin.y += keyboardSize.height / 2
             }
-//            scrollView.contentInset.bottom = 0
-//            scrollView.verticalScrollIndicatorInsets = .zero
         }
     }
     
@@ -209,13 +209,15 @@ class RegistrationViewController: UIViewController, UITextFieldDelegate, UIScrol
         var paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.03
         paragraphStyle.alignment = NSTextAlignment.center
-        //view.textAlignment = .center
         view.attributedText = NSMutableAttributedString(string: "Нажимая кнопку “Далее” Вы принимаете пользовательское Соглашение и политику конфедициальности ", attributes: [NSAttributedString.Key.kern: -0.17, NSAttributedString.Key.paragraphStyle: paragraphStyle])
         return view
     }()
     
     @objc func nextButtonPressed() {
         print("Нажали кнопку логина")
+        let vc = AcceptRegistrationViewController()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: false, completion: nil)
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

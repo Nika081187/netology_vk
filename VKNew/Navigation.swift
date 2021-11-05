@@ -5,7 +5,6 @@
 //  Created by v.milchakova on 05.11.2021.
 //
 
-import Foundation
 import UIKit
 
 class Navigation: UINavigationController {
@@ -19,6 +18,7 @@ class Navigation: UINavigationController {
         backbutton.addTarget(self, action: #selector(backAction), for: .touchUpInside)
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backbutton)
+        navigationController?.isToolbarHidden = false
     }
 
     @objc func backAction() -> Void {
