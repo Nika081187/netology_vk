@@ -16,8 +16,8 @@ class MainViewController: UIViewController {
     private var addedPostTitles = [String]()
     private var tapped = false
     private let table = UITableView(frame: .zero, style: .grouped)
-    private var tableFavoritesPredicate: NSPredicate?
-    private let common = CommonFuncs()
+
+    private let common = CommonFuncs(modelName: "PostModel")
     
     private var reuseId: String {
         String(describing: PostTableViewCell.self)
@@ -43,29 +43,6 @@ class MainViewController: UIViewController {
         tableSetup()
         setupLayout()
         gestureRecognizerSetup()
-    }
-    
-    @objc func showFilterAlert() {
-        let ac = UIAlertController(title: "Enter author name", message: nil, preferredStyle: .alert)
-        ac.addTextField()
-
-        let submitAction = UIAlertAction(title: "OK", style: .default) { [self, unowned ac] _ in
-            guard let field = ac.textFields else { return }
-            let answer = field[0]
-            guard let text = answer.text else { return }
-            showAuthor(name: text)
-        }
-        ac.addAction(submitAction)
-        present(ac, animated: true)
-    }
-    func showAuthor(name: String) {
-        print("Показываем посты с определенным автором")
-        tableFavoritesPredicate = NSPredicate(format: "author = %s", argumentArray: [name])
-    }
-    
-    @objc func clearFilterButtonClicked() {
-        print("Очищаем фильтр по автору")
-        tableFavoritesPredicate = nil
     }
     
     func tableSetup() {
@@ -114,7 +91,7 @@ class MainViewController: UIViewController {
         pst.likes = post.likes
         
         coreDataManager.save()
-        print("Пост \(post.author) добавлен в Избранное: favorites \(common.fetchData(predicate: nil).count)")
+        print("Пост \(post.author) добавлен в Избранное: favorites \(common.fetchData(for: Post.self, predicate: nil).count)")
         table.reloadData()
     }
 }
@@ -159,7 +136,7 @@ extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! PostTableViewCell
         
-        guard let name = cell.nameLabel.text, let title = cell.descriptionLabel.text, let image = cell.postImage.image, let likes = cell.likesLabel.text, let views = cell.viewsLabel.text else {
+        guard let name = cell.userNameLabel.text, let title = cell.postTextLabel.text, let image = cell.postImage.image, let likes = cell.likesLabel.text, let views = cell.commentLabel.text else {
             return
         }
         

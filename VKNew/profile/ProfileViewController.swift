@@ -18,7 +18,7 @@ class ProfileViewController: UIViewController {
     private var titleText = ""
     private var tapped = false
     private let table = UITableView(frame: .zero, style: .grouped)
-    private let common = CommonFuncs()
+    private let common = CommonFuncs(modelName: "PostModel")
     
     private var reuseId: String {
         String(describing: PostTableViewCell.self)
@@ -93,7 +93,7 @@ class ProfileViewController: UIViewController {
         pst.likes = post.likes
         
         coreDataManager.save()
-        print("Пост \(post.author) добавлен в Избранное: favorites \(common.fetchData(predicate: nil).count)")
+        print("Пост \(post.author) добавлен в Избранное: favorites \(common.fetchData(for: Post.self, predicate: nil).count)")
         table.reloadData()
     }
     
@@ -226,6 +226,10 @@ extension ProfileViewController: UITableViewDataSource {
         return 0
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 368
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: PostTableViewCell = tableView.dequeueReusableCell(withIdentifier: reuseId, for: indexPath) as! PostTableViewCell
             let post = Storage.posts[indexPath.row]
@@ -255,7 +259,7 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! PostTableViewCell
         
-        guard let name = cell.nameLabel.text, let title = cell.descriptionLabel.text, let image = cell.postImage.image, let likes = cell.likesLabel.text, let views = cell.viewsLabel.text else {
+        guard let name = cell.userNameLabel.text, let title = cell.postTextLabel.text, let image = cell.postImage.image, let likes = cell.likesLabel.text, let views = cell.commentLabel.text else {
             return
         }
         

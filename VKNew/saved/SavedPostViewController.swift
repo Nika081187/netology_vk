@@ -11,7 +11,7 @@ class SavedPostViewController: UIViewController {
     
     private let table = UITableView(frame: .zero, style: .grouped)
     private var tableFavoritesPredicate: NSPredicate?
-    private let common = CommonFuncs()
+    private let common = CommonFuncs(modelName: "PostModel")
     
     private var reuseId: String {
         String(describing: PostTableViewCell.self)
@@ -23,7 +23,7 @@ class SavedPostViewController: UIViewController {
 
     func reloadTable() {
         print("Перезагружаем таблицу постов")
-        Storage.favoritePosts = self.common.convertCoreDataPostsToStoragePost(posts: common.fetchData(predicate: tableFavoritesPredicate))
+        Storage.favoritePosts = self.common.convertCoreDataPostsToStoragePost(posts: common.fetchData(for: Post.self, predicate: tableFavoritesPredicate))
         table.reloadData()
     }
 
@@ -104,17 +104,20 @@ extension SavedPostViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard section == 0 else {
-            let count = common.fetchData(predicate: tableFavoritesPredicate).count
-            print("Количество постов в favorites: \(count)")
-            return count
+//            let count = common.fetchData(for: Post.self, predicate: tableFavoritesPredicate).count
+//            print("Количество постов в favorites: \(count)")
+//            return count
+            return Storage.posts.count
         }
         return 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: PostTableViewCell = tableView.dequeueReusableCell(withIdentifier: reuseId, for: indexPath) as! PostTableViewCell
-        let post = common.fetchData(predicate: tableFavoritesPredicate)[indexPath.row]
-        cell.configureViaCoreData(post: post )
+//        let post = common.fetchData(for: Post.self, predicate: tableFavoritesPredicate)[indexPath.row]
+//        cell.configureViaCoreData(post: post )
+        let post = Storage.posts[indexPath.row]
+        cell.configureViaStorage(post: post)
         return cell
     }
 }

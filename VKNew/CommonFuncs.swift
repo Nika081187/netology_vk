@@ -13,30 +13,68 @@ class CommonFuncs: NSObject, NSFetchedResultsControllerDelegate {
     var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>!
     private let coreDataManager = CoreDataStack(modelName: "PostModel")
     
-    func fetchData(predicate: NSPredicate?) -> [Post] {
-        if fetchedResultsController == nil {
-            let context = coreDataManager.persistentStoreContainer.viewContext
-            let entityDescription = NSEntityDescription.entity(forEntityName: "Post", in: context)
-            let request = NSFetchRequest<NSFetchRequestResult>()
-
-            request.entity = entityDescription
-            request.predicate = predicate
-            request.fetchLimit = 20
-            request.fetchBatchSize = 20
-            
-            let nameSortDescriptor = NSSortDescriptor(key: "author", ascending: true)
-            request.sortDescriptors = [nameSortDescriptor]
-            
-            fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: coreDataManager.persistentStoreContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-
-            fetchedResultsController.delegate = self
+//    func fetchData(predicate: NSPredicate?) -> [Post] {
+//        if fetchedResultsController == nil {
+//            let context = coreDataManager.persistentStoreContainer.viewContext
+//            let entityDescription = NSEntityDescription.entity(forEntityName: "Post", in: context)
+//            let request = NSFetchRequest<NSFetchRequestResult>()
+//
+//            request.entity = entityDescription
+//            request.predicate = predicate
+//            request.fetchLimit = 20
+//            request.fetchBatchSize = 20
+//
+//            let nameSortDescriptor = NSSortDescriptor(key: "author", ascending: true)
+//            request.sortDescriptors = [nameSortDescriptor]
+//
+//            fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: coreDataManager.persistentStoreContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+//
+//            fetchedResultsController.delegate = self
+//        }
+//        do {
+//            try fetchedResultsController.performFetch()
+//        } catch {
+//            print("Fetch failed")
+//        }
+//        return fetchedResultsController.fetchedObjects as! [Post]
+//    }
+    
+    private let modelName: String
+    
+    init(modelName: String) {
+        self.modelName = modelName
+    }
+    
+    lazy var persistentStoreContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: self.modelName)
+        container.loadPersistentStores { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError()
+            }
         }
+        return container
+    }()
+    
+    func getContext() -> NSManagedObjectContext {
+        persistentStoreContainer.newBackgroundContext()
+    }
+    
+    func fetchData<T: NSManagedObject>(for entity: T.Type, predicate: NSPredicate?) -> [Post] {
+        let taskContext = persistentStoreContainer.viewContext
+        
+        taskContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        taskContext.undoManager = nil
+
+        let entityName = String(describing: T.self)
+        let request = NSFetchRequest<T>(entityName: entityName)
+        request.predicate = predicate
+
         do {
-            try fetchedResultsController.performFetch()
+            let posts = try taskContext.fetch(request) as! [Post]
+            return posts
         } catch {
-            print("Fetch failed")
+            fatalError()
         }
-        return fetchedResultsController.fetchedObjects as! [Post]
     }
     
     func convertCoreDataPostsToStoragePost(posts: [Post]?) -> [StoragePost] {
