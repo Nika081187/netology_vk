@@ -18,6 +18,7 @@ extension Post {
     }
 
     @NSManaged public var author: String?
+    @NSManaged public var authordescription: String?
     @NSManaged public var title: String?
     @NSManaged public var image: Data?
     @NSManaged public var likes: Int64

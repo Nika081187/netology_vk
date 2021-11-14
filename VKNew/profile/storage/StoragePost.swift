@@ -9,6 +9,7 @@ import UIKit
 
 struct StoragePost {
     var author: String
+    var authorDescription: String
     var title: String
     var image: UIImage
     var likes: Int64

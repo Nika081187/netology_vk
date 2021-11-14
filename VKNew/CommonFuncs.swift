@@ -84,10 +84,10 @@ class CommonFuncs: NSObject, NSFetchedResultsControllerDelegate {
             return favoritePosts
         }
         for post in postsFromCoreData {
-            guard let author = post.author, let title = post.title, let image = post.image, let data = UIImage(data: image) else {
+            guard let author = post.author, let authorDescription = post.authordescription, let title = post.title, let image = post.image, let data = UIImage(data: image) else {
                 return favoritePosts
             }
-            let pst = StoragePost(author: author, title: title, image: data,
+            let pst = StoragePost(author: author, authorDescription: authorDescription, title: title, image: data,
                                   likes: post.likes, views: post.views)
             favoritePosts.append(pst)
         }

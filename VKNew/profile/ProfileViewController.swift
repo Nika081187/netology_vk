@@ -8,7 +8,7 @@
 import UIKit
 
 @available(iOS 13.0, *)
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, MyViewDelegate {
     
     private let screenRect = UIScreen.main.bounds
     private lazy var screenWidth = screenRect.size.width
@@ -31,12 +31,19 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         view.addSubview(table)
         table.addSubview(avatarButton)
+        table.allowsSelection = false
+        header.delegate = self
         
         self.navigationController?.navigationBar.isHidden = true
         
         tableSetup()
         setupLayout()
         gestureRecognizerSetup()
+    }
+    
+    func didTapButton() {
+        let vc = ProfileSettingsView()
+        self.navigationController?.present(vc, animated: false)
     }
     
     func tableSetup() {
@@ -238,7 +245,7 @@ extension ProfileViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 { return 220 }
+        if section == 0 { return 450 }
         if section == 1 { return 140 }
         return .zero
     }
@@ -259,11 +266,11 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! PostTableViewCell
         
-        guard let name = cell.userNameLabel.text, let title = cell.postTextLabel.text, let image = cell.postImage.image, let likes = cell.likesLabel.text, let views = cell.commentLabel.text else {
+        guard let name = cell.userNameLabel.text, let authorDescription = cell.userDescriptionLabel.text, let title = cell.postTextLabel.text, let image = cell.postImage.image, let likes = cell.likesLabel.text, let views = cell.commentLabel.text else {
             return
         }
         
-        let post = StoragePost(author: name, title: title, image: image, likes: common.getInt(text: likes), views: common.getInt(text: views))
+        let post = StoragePost(author: name, authorDescription: authorDescription, title: title, image: image, likes: common.getInt(text: likes), views: common.getInt(text: views))
         selectedPost = post
     }
 }

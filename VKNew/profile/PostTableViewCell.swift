@@ -14,8 +14,7 @@ class PostTableViewCell: UITableViewCell {
     public func configureViaStorage(post: StoragePost){
         userNameLabel.text = post.author
         avatarImage.image = post.image
-        userNameLabel.text = post.author
-        userDescriptionLabel.text = post.title
+        userDescriptionLabel.text = post.authorDescription
         postImage.image = post.image
         postTextLabel.text = post.title
         likesLabel.text = "\(post.likes)"
@@ -80,10 +79,8 @@ class PostTableViewCell: UITableViewCell {
         let button = UIButton()
         button.toAutoLayout()
         button.tintColor = UIColor(red: 1, green: 0.62, blue: 0.271, alpha: 1)
-       // button.layer.backgroundColor = UIColor(red: 1, green: 0.62, blue: 0.271, alpha: 1).cgColor
         var img = UIImage(systemName: "list.bullet")
         button.setImage(img, for: .normal)
-        //button.transform.rotated(by: CGFloat(Double.pi / 2))
         return button
     }()
     
@@ -104,7 +101,7 @@ class PostTableViewCell: UITableViewCell {
     public lazy var postImage: UIImageView = {
         let postImage = UIImageView()
         postImage.toAutoLayout()
-        postImage.contentMode = .scaleAspectFit
+        postImage.contentMode = .scaleToFill
         return postImage
     }()
 
@@ -215,7 +212,7 @@ class PostTableViewCell: UITableViewCell {
         userDescriptionLabel.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(userNameLabel.snp.bottom).offset(3)
             make.height.equalTo(20)
-            make.width.equalTo(68)
+            make.width.equalTo(100)
             make.leading.equalTo(userNameLabel)
         }
         
@@ -271,7 +268,7 @@ class PostTableViewCell: UITableViewCell {
         likesLabel.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(likesButton)
             make.height.equalTo(20)
-            make.width.equalTo(18)
+            make.width.equalTo(25)
             make.leading.equalTo(likesButton.snp.trailing).offset(10)
         }
         
@@ -285,7 +282,7 @@ class PostTableViewCell: UITableViewCell {
         commentLabel.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(likesLabel)
             make.height.equalTo(20)
-            make.width.equalTo(18)
+            make.width.equalTo(25)
             make.leading.equalTo(commentButton.snp.trailing).offset(10)
         }
         

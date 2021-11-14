@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0E5BA0618299F577D0D2B586 /* Pods_VKNew.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6EA40933749CCE9700929BE /* Pods_VKNew.framework */; };
+		28199DBD274191F3004BA157 /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28199DBC274191F2004BA157 /* ProfileSettingsView.swift */; };
 		2899659027357DA000C2FB7E /* CommonFuncs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2899658F27357DA000C2FB7E /* CommonFuncs.swift */; };
 		28F0A39627350E5700679CEC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F0A39527350E5700679CEC /* AppDelegate.swift */; };
 		28F0A39827350E5700679CEC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F0A39727350E5700679CEC /* SceneDelegate.swift */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		20FB4FA6E3B82B1F30F474DC /* Pods-VKNew.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VKNew.debug.xcconfig"; path = "Target Support Files/Pods-VKNew/Pods-VKNew.debug.xcconfig"; sourceTree = "<group>"; };
+		28199DBC274191F2004BA157 /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
 		2899658F27357DA000C2FB7E /* CommonFuncs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFuncs.swift; sourceTree = "<group>"; };
 		28F0A39227350E5700679CEC /* VKNew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKNew.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F0A39527350E5700679CEC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 				28F0A3CE2735458A00679CEC /* PhotosViewController.swift */,
 				28F0A3CA2735455D00679CEC /* ProfileTableHederView.swift */,
 				28F0A3B827353E9900679CEC /* ProfileViewController.swift */,
+				28199DBC274191F2004BA157 /* ProfileSettingsView.swift */,
 			);
 			path = profile;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				28F0A3D5273545F300679CEC /* PhotoStorage.swift in Sources */,
 				28F0A3CD2735457300679CEC /* ProfilePhotoStackView.swift in Sources */,
 				28F0A3CF2735458A00679CEC /* PhotosViewController.swift in Sources */,
+				28199DBD274191F3004BA157 /* ProfileSettingsView.swift in Sources */,
 				28F0A3C52735452600679CEC /* CoreDataStack.swift in Sources */,
 				28F0A3C62735452600679CEC /* Post+CoreDataProperties.swift in Sources */,
 				28F0A3CB2735455D00679CEC /* ProfileTableHederView.swift in Sources */,

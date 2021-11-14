@@ -37,7 +37,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(table)
-        
+        table.allowsSelection = false
         self.navigationController?.navigationBar.isHidden = true
         
         tableSetup()
@@ -136,11 +136,11 @@ extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! PostTableViewCell
         
-        guard let name = cell.userNameLabel.text, let title = cell.postTextLabel.text, let image = cell.postImage.image, let likes = cell.likesLabel.text, let views = cell.commentLabel.text else {
+        guard let name = cell.userNameLabel.text, let authorDescription = cell.userDescriptionLabel.text, let title = cell.postTextLabel.text, let image = cell.postImage.image, let likes = cell.likesLabel.text, let views = cell.commentLabel.text else {
             return
         }
         
-        let post = StoragePost(author: name, title: title, image: image, likes: getInt(text: likes), views: getInt(text: views))
+        let post = StoragePost(author: name, authorDescription: authorDescription, title: title, image: image, likes: getInt(text: likes), views: getInt(text: views))
         selectedPost = post
     }
     

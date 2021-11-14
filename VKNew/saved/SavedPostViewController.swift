@@ -30,7 +30,7 @@ class SavedPostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(table)
-        
+        table.allowsSelection = false
         self.navigationController?.navigationBar.isHidden = true
         
         tableSetup()
